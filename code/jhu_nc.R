@@ -93,4 +93,11 @@ nc_county_start <- nc_daily_DATE %>%
   summarize(start_date = min(Date), 
             end_date = max(Date))
 
+# CALCULATE DAYS NUMERICALLY -- WE WILL USE THIS FOR LATER CALCULATIONS 
+nc_county_byDAY <- nc_daily_DATE %>%
+  mutate(day = as.numeric(as.Date(Date) - as.Date(min(Date))))%>%
+  relocate(day, .before = daily_deaths)
+
+# WRITE OUR RAW FILE  
+write.csv(nc_county_byDAY, file = "./data/nc_county_jhu_counts.csv")
 
