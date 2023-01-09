@@ -109,13 +109,41 @@ for(county in counties){
 
   }
 }
+nc_cty_scaled <- nc_cty_scaled %>%
+  fill(County)
 
-# fill all NAs with 0s
+### FINAL NC_CTY_SCALED DO NOT TOUCH
+
+nc_temp <- merge(nc_cty_scaled, 
+                 jhu_week_dist[, c("County", "Date", "daily_deaths")], 
+                 by = c("County", "Date"), 
+                 all = FALSE)%>%
+  mutate(DeathsSM = ifelse(is.na(Deaths0.17), daily_deaths, DeathsSM))
+
+nc_temp[is.na(nc_temp)] <- 0
+
+
+nc_temp <- nc_temp %>%
+  select(-daily_deaths)
+
+nc_round <- nc_temp %>%
+  mutate_if(is.numeric, ceiling)
 
 
 
-
-
+nc_round_summary <- nc_round %>%
+  group_by(County)%>%
+  summarize(total_deaths0.17 = sum(Deaths0.17), 
+            total_deaths18.24 = sum(Deaths18.24), 
+            total_deaths25.49 = sum(Deaths25.49), 
+            total_deaths50.64 = sum(Deaths50.64), 
+            total_deaths65.74 = sum(Deaths65.74), 
+            total_deaths75p = sum(Deaths75p), 
+            total_deathsSM = sum(DeathsSM))
+# export file
+write.csv(nc_temp,"./outputs/NC_AgeDateCat.csv", row.names = FALSE)
+writexl::write_xlsx(nc_temp, "./outputs/NC_AgeDateCat.xlsx")
+write.csv(nc_round, "./outputs/NC_AgeDateCat_ceil.csv", row.names = FALSE)
 
 # temp<- jhu_week_dist%>%
 #   filter(County == "Alamance", week_start == as.Date("2020-05-17"))%>%
