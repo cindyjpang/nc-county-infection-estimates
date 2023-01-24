@@ -23,6 +23,7 @@ library(tidyr)
 library(ggplot2)
 library(tmap)
 library(sf)
+library(lubridate)
 
 age_dat <- read.csv("./outputs/NC_AgeDateCat.csv")
 age_dat_ceil <- read.csv("./outputs/NC_AgeDateCat_ceil.csv")
@@ -52,6 +53,8 @@ nc_death_ceil_summary <- age_dat_ceil %>%
             total_deathsSM = sum(DeathsSM))%>%
   rowwise(County)%>%
   mutate(total_deaths_all = sum(c_across(total_deaths0.17:total_deathsSM)))
+
+write.csv(nc_death_ceil_summary, "./outputs/nc_death_ceil_summary.csv")
 
 
 # compare to ncdhhs data

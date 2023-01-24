@@ -51,7 +51,16 @@ ihme_summary <- ihme_dat %>%
   summarize(mean = mean(ifr_agespecific_mean)/100, 
             sd = sd(ifr_agespecific_mean)/100)
 
+ihme_summary <- rbind(ihme_summary, c("Age SM",mean(ihme_dat$ifr_agespecific_mean)/100, sd(ihme_dat$ifr_agespecific_mean)/100))
 
+ihme_summary$age_cat <- as.character(unlist(ihme_summary$age_cat))
+ihme_summary$mean <- as.numeric(ihme_summary$mean)
+ihme_summary$sd <- as.numeric(ihme_summary$sd)
+
+
+colnames(ihme_summary)[2] <- "ifr_mean"
+colnames(ihme_summary)[3] <- "ifr_sd"
+write.csv(ihme_summary, "./outputs/IFR_by_Age.csv", row.names = FALSE)
 
 
 
