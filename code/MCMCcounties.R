@@ -99,5 +99,5 @@ all_obs <- rbind(deaths0.17, deaths18.24, deaths25.49, deaths50.64, deaths65.74,
 all_obs <- arrange(all_obs, County)
 
 # export files 
-write.csv(all_obs, "./outputs/mcmc_counties.csv")
+write.csv(all_obs, "./outputs/mcmc_counties.csv", row.names = FALSE)
 
