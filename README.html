@@ -371,7 +371,21 @@ University</a>, filtered and subsetted to include a time series of daily
 reported cases and deaths for each county in the state of North
 Carolina<br />
 -<code>partitionCountyAgeDate.R</code> outputs the inputs for the MCMC
-Simulation</p>
+Simulation<br />
+- <code>summarizeIFR.R</code> produces a summary of IFR values for the
+data-table was produced from <a href="https://ghdx.healthdata.org/record/ihme-data/covid_19_infection_fatality_ratio">data
+from the IHME</a> with means and standard deviations for each
+age-group</p>
+<p><strong>MCMC Files</strong> are used for sorting and tidying data
+before it runs on UNC Longleaf</p>
+<p>1.1 <code>MCMCcounties.R</code> sorts through all age groups and
+counties with total deaths greater than 1<br />
+1.2 <code>MCMCparams.R</code> generates the Monte-Carlo simulation
+parameters for 10,000 simulations. This also allows for
+reproducibility.<br />
+2. <code>MCMCsort_days.R</code> must be completed after 1.1, which
+parses the dates (yyyy-mm-dd) into integer days<br />
+3. <code>MCMCrun.R</code> file to RUN on Longleaf</p>
 </div>
 <div id="data" class="section level3">
 <h3><strong><em>Data</em></strong></h3>
