@@ -50,7 +50,7 @@ deaths18.24 <- age_dat_ceil %>%
         by = "County", 
         all = FALSE)%>%
   select(County, Date, Deaths18.24)%>%
-  mutate(AgeGrp = "Ages 0-18")%>%
+  mutate(AgeGrp = "Ages 18-24")%>%
   rename(Count = Deaths18.24)
 
 deaths25.49 <- age_dat_ceil %>%

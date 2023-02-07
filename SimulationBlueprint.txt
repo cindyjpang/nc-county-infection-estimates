@@ -1,0 +1,58 @@
+new_inf_output <- matrix(data = NA, nrow = 258, ncol = 10)
+
+start <- Sys.time()
+
+for(sim in 1: 10){
+  alpha = monte.sim$alpha[sim]
+  beta = monte.sim$beta[sim]
+  ifr = monte.sim$ifr[sim]
+  denominator = monte.sim$denominator[sim]
+  
+  n_mtx <- matrix(data = NA, nrow = 258, ncol = 258)
+  s <- c()
+  
+  for(t_prime in 1:258){
+    t_prime_row <- c()
+    for(t in 1:258){
+      x = t-t_prime
+      if(x <= 0){
+        t_prime_row[t]<- 0
+      }else{
+        pdf <- (x*(alpha-1)*exp(-x/beta))/denominator
+        t_prime_row[t]<- (aus_dat[t, 3]*dgamma(x,shape= alpha, scale = 1/beta))/ifr
+      }
+      
+    }
+    n_mtx[t_prime, ]<- t_prime_row
+    s[t_prime]<- sum(t_prime_row)
+  }
+  
+  scaled_inf <- c()
+  for(i in 1:258){
+    scaled_inf[i]<- s[i]/pgamma(259-i, shape = alpha, scale = 1/beta)
+  }
+  new_inf_output[, sim]<- scaled_inf
+  print(paste0("Simulation #: ", sim))
+}
+
+print(Sys.time() - start)  
+ 
+  
+ 
+  aus_dat$back_inf <- scaled_inf
+  
+  
+  plot(aus_dat$days, aus_dat$n_case, type = 'l',col = "black")
+  lines(aus_dat$days, aus_dat$back_inf, col = 'red')
+
+  library(ggplot2)
+  ggplot(aus_dat, aes(days))+
+    geom_line(aes(y = n_case), color = "black")+
+    geom_line(aes(y = back_inf), color = "red")
+  
+
+plot(c(1:258), new_inf_output[ ,3], type = 'l', color = 'blue')
+
+new_inf_output$day <- c(1:258)
+library(tidyr)
+new_inf_output_plt_df <- gather(as.data.frame(new_inf_output), "sim", "inf",-day )

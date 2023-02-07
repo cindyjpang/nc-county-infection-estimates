@@ -32,7 +32,9 @@ age_param_tbl <- merge(ifr_age_dat,
                        all = TRUE)
 
 age_param_tbl <- age_param_tbl %>%
-  mutate(cov_incubation = incubation_sd/incubation_mean)
+  mutate(cov_incubation = incubation_sd/incubation_mean,
+         age_cat = gsub("Age", "Ages", age_cat))
+age_param_tbl$age_cat[6]<- "Ages 75p"
 # Define Independent Parameters 
 n_monte = 10000
 missing_value = -1.0e34
@@ -122,6 +124,8 @@ for(i in unique(age_param_tbl$age_cat)){
   
 }
 
-write.csv(monte.sim.age, "./outputs/mcmc_inputs.csv", row.names = FALSE)
+
+
+write.csv(monte.sim.age, "./outputs/mcmc_params.csv", row.names = FALSE)
 
 
